@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+pydantic
+groq
+google_generativeai
+python_dotenv
+httpx
+
+#new for this app
+pypdf
+supabase
+numpy
+rank_bm25
+
