@@ -7,9 +7,10 @@ def load_pdf_text(path: str) -> str:
     replacement = ""
     text = "\n".join(page.extract_text() or "" for page in reader.pages)
     text = re.sub(pattern, replacement, text)
+    text = text.replace("\xad", "-")
 
-    #we have two occurence of this heading [Chapter I] but real chapter starts on the secind occurence 
-    #so we will find all ocurence and then get secnd occurence 
+    #we have two occurence of this heading [Chapter I] but real chapter starts on the secnod occurence 
+    #so we will find all ocurence and then get second occurence 
 
     chapters = [m.start() for m in re.finditer(r"CHAPTER I\b", text)]
 
@@ -18,8 +19,8 @@ def load_pdf_text(path: str) -> str:
     return text
 
 
-SECTON_PATTERN = re.compile(r"\n\s*(\d{1,3}(?:A-Z)?)\.\s")
-
+# SECTON_PATTERN = re.compile(r"\n\s*(\d{1,3}(?:A-Z)?)\.\s")
+SECTON_PATTERN = re.compile(r"\n\s*\*?(?:\d{1,3}\[\s*)*(?:\d(?=\d{3}\.\s))?(\d{1,3}|\d{2,3}-?[A-Z]{1,2})\.\s")
 def chunk_by_section(text:str) -> list[dict]:
     matches = list(SECTON_PATTERN.finditer(text)) 
     #every place a section starts
