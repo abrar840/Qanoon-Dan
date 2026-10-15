@@ -1,11 +1,24 @@
 from pypdf import PdfReader
 import re 
 
+#footnote cleaner
+FOOTNOTE_START = re.compile(r"^\d{1,3}[A-Z][a-z]")   # "1The", "2Subs.", "10Subs." (not "52A." or "2[*")
+BODY_START = re.compile(r"^\s*(\*?(?:\d{1,3}\[\s*)*\d{1,4}[A-Z]{0,2}\.\s|CHAPTER\s)")  # a section or chapter start
+
+def remove_footnotes(page_text: str) -> str:
+    lines = page_text.split("\n")
+    for i, line in enumerate(lines):
+        # footnote block = looks like "1The..." AND no section/chapter starts after it on this page
+        if FOOTNOTE_START.match(line.strip()) and not any(BODY_START.match(x) for x in lines[i + 1:]):
+            return "\n".join(lines[:i])          # keep only the lines above the footnotes
+    return page_text
+
+
 def load_pdf_text(path: str) -> str:
     reader = PdfReader(path)
     pattern = r"Page \d+ of \d+\s*"
     replacement = ""
-    text = "\n".join(page.extract_text() or "" for page in reader.pages)
+    text = "\n".join(remove_footnotes(page.extract_text() or "") for page in reader.pages)
     text = re.sub(pattern, replacement, text)
     text = text.replace("\xad", "-")
 
@@ -51,6 +64,7 @@ if __name__ == "__main__":
     text = load_pdf_text("data/raw/ppc.pdf")
     print("=== RAW TEXT SAMPLE ===")
     print(text[:2000])
+    # print(text)
     # first!
 
 
@@ -58,7 +72,8 @@ if __name__ == "__main__":
     print(f"\nTotal chunks: {len(chunks)}")
     for c in chunks[:5]:
         print(f"\n--- Section {c['section']} ---")
-        print(c["text"][:150])
+        print(c["text"])
+       
 
 
 
