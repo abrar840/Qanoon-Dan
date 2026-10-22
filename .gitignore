@@ -4,3 +4,7 @@ venv/
 .venv/
 data/raw/*.pdf
 data/chunks
+
+# web (React)
+node_modules/
+web/dist/

@@ -1,0 +1,12 @@
+# dependencies and build output
+node_modules
+dist
+
+# local env files (real values). Only .env.example is committed.
+.env
+.env.local
+.env.*.local
+
+# editor / OS noise
+.DS_Store
+*.log

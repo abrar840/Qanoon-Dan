@@ -1,0 +1,394 @@
+/* Reusable pieces: buttons, fields, cards, dialog, toast, avatar, spinner. */
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 44px; /* comfortable thumb target */
+  padding: 0 var(--s-4);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background var(--transition),
+    border-color var(--transition);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--c-surface-2);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+}
+
+.btn-primary {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: var(--c-on-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--c-primary-hover);
+  border-color: var(--c-primary-hover);
+}
+
+.btn-danger {
+  color: var(--c-error);
+  border-color: var(--c-error);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--c-error-bg);
+}
+
+.btn-ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+.btn-sm {
+  min-height: 36px;
+  padding: 0 var(--s-3);
+  font-size: var(--text-sm);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* Icon-only button (square). Always has an aria-label or .sr-only text. */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--c-text-muted);
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: var(--c-surface-2);
+  color: var(--c-text);
+}
+
+.icon-btn[aria-pressed='true'] {
+  color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- Form fields ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  margin-bottom: var(--s-4);
+}
+
+.field label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--c-text-muted);
+}
+
+.field input,
+.field textarea,
+.field select {
+  min-height: 44px;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  border-color: var(--c-primary);
+}
+
+.field input[aria-invalid='true'] {
+  border-color: var(--c-error);
+}
+
+.field .hint {
+  font-size: var(--text-sm);
+  color: var(--c-text-faint);
+}
+
+.field .field-error {
+  font-size: var(--text-sm);
+  color: var(--c-error);
+}
+
+.form-error {
+  padding: var(--s-3);
+  margin-bottom: var(--s-4);
+  border: 1px solid var(--c-error);
+  border-radius: var(--radius);
+  background: var(--c-error-bg);
+  color: var(--c-error);
+  font-size: var(--text-sm);
+}
+
+.form-success {
+  padding: var(--s-3);
+  margin-bottom: var(--s-4);
+  border: 1px solid var(--c-success);
+  border-radius: var(--radius);
+  background: var(--c-info-bg);
+  font-size: var(--text-sm);
+}
+
+/* Radio / checkbox rows used on the Settings page. */
+.choice-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 44px;
+  padding: 0 var(--s-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  cursor: pointer;
+}
+
+.choice:has(input:checked) {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+
+.choice input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--c-primary);
+  margin: 0;
+}
+
+.choice .choice-desc {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+}
+
+/* ---------- Cards and sections ---------- */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: var(--s-4);
+}
+
+.section {
+  margin-bottom: var(--s-6);
+}
+
+.section > h2 {
+  margin-bottom: var(--s-3);
+}
+
+.section-desc {
+  color: var(--c-text-muted);
+  font-size: var(--text-sm);
+  margin-bottom: var(--s-3);
+}
+
+.danger-zone {
+  border-color: var(--c-error);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+
+.row-between {
+  justify-content: space-between;
+}
+
+.muted {
+  color: var(--c-text-muted);
+}
+
+.small {
+  font-size: var(--text-sm);
+}
+
+/* ---------- Avatar ---------- */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  font-weight: 650;
+  font-size: var(--text-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-lg {
+  width: 80px;
+  height: 80px;
+  font-size: var(--text-xl);
+}
+
+/* ---------- Spinner ---------- */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--c-border-strong);
+  border-top-color: var(--c-primary);
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Dialog (native <dialog>) ---------- */
+dialog.dialog {
+  width: min(92vw, 420px);
+  padding: 0;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  color: var(--c-text);
+  box-shadow: var(--shadow);
+}
+
+dialog.dialog::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+
+.dialog-body {
+  padding: var(--s-5);
+}
+
+.dialog-body h2 {
+  margin-bottom: var(--s-2);
+}
+
+.dialog-actions {
+  display: flex;
+  gap: var(--s-2);
+  justify-content: flex-end;
+  margin-top: var(--s-5);
+}
+
+/* ---------- Toast ---------- */
+.toast-region {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--s-4) + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  z-index: 200;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.toast {
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--radius);
+  background: var(--c-text);
+  color: var(--c-bg);
+  font-size: var(--text-sm);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.toast-error {
+  background: var(--c-error);
+  color: #fff;
+}
+
+.toast-success {
+  background: var(--c-success);
+  color: #fff;
+}
+
+/* ---------- Menus (user menu in top bar) ---------- */
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  min-width: 200px;
+  padding: var(--s-1);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 50;
+}
+
+.menu-header {
+  padding: var(--s-2) var(--s-3);
+  border-bottom: 1px solid var(--c-border);
+  margin-bottom: var(--s-1);
+}
+
+.menu-header strong {
+  display: block;
+}
+
+.menu-header span {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+  word-break: break-all;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 var(--s-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--c-text);
+  text-align: left;
+  text-decoration: none;
+}
+
+.menu-item:hover {
+  background: var(--c-surface-2);
+}
