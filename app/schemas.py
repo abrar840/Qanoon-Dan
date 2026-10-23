@@ -30,3 +30,10 @@ class ChatResponse(BaseModel):
    reply:str
    model:str
    provider:Optional[str]=None 
+   
+   
+class RetrievedChunk(BaseModel):
+    ref: str
+    source_name: str
+    content: str
+    distance: float      # cosine distance from the SQL function, smaller = closer
