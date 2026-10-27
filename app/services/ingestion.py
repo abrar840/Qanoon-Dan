@@ -1,10 +1,11 @@
 """
 Ingestion: PDF -> clean text -> one chunk per section.
 
-Three steps, three functions:
+Four steps, four functions:
   1. remove_footnotes()   drop the footnote block at the bottom of each page
   2. load_pdf_text()      read the PDF, clean it, cut off the table of contents
   3. chunk_by_section()   split the text where each section starts, e.g. "302. Punishment..."
+  4. strip_amendment_markers()  "1[three thousand rupees]" -> "[three thousand rupees]"
 
 Why chunk by section and not by a fixed size: a legal answer must cite a section.
 If a chunk is exactly one section, the citation is always right and never half a section.
@@ -69,6 +70,19 @@ def load_pdf_text(path: str) -> str:
 # Tested against every section number 1-511. 634 chunks. Only 325 is missing: the Code itself omits it.
 SECTON_PATTERN = re.compile(r"\n\s*\*?(?:\d{1,3}\[\s*)*(?:\d(?=\d{3}\.\s))?(\d{1,3}|\d{2,3}-?[A-Z]{1,2})\.\s")
 
+# ---- amendment markers ------------------------------------------------------
+# Amended text in this PDF is wrapped in brackets with a footnote number glued in front:
+# "fine which may extend to 1[three thousand rupees]". The LLM read "1[three thousand"
+# as Rs 13,000 (and "4[three thousand" as Rs 43,000). We drop the number and keep the
+# bracket, so the text still shows it was amended. Checked by hand: all 495 markers in
+# the 634 chunks are footnote numbers, including nested ones like "3[4[ 478.".
+# Must run AFTER chunking, because SECTON_PATTERN uses these markers to find section starts.
+AMENDMENT_MARKER = re.compile(r"\d{1,3}\[")
+
+def strip_amendment_markers(text: str) -> str:
+    return AMENDMENT_MARKER.sub("[", text)
+
+
 def chunk_by_section(text:str) -> list[dict]:
     """Split the text into [{"section": "302", "text": "302. Punishment of ..."}, ...]."""
     matches = list(SECTON_PATTERN.finditer(text))
@@ -89,7 +103,7 @@ def chunk_by_section(text:str) -> list[dict]:
         if len(chunk_text) < 50:
             #pdf noise (a stray number that looked like a section but has no text after it)
             continue
-        chunks.append({"section": section, "text": chunk_text})
+        chunks.append({"section": section, "text": strip_amendment_markers(chunk_text)})
 
     return chunks
 

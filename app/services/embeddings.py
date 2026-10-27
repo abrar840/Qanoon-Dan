@@ -82,3 +82,16 @@ def store_chunks(chunks:list[dict], meta:dict, batch_size:int = 20 ):
         # 7. Wait before the next batch. Free tier = 100 TEXTS per minute (each text in a
         #    batch counts). 20 texts every 15s = 80/min, safely under the limit.
         time.sleep(15)
+
+
+def delete_stale_chunks(chunks: list[dict], source_name: str, batch_size: int = 50):
+    # Run AFTER store_chunks. When the cleaning changes, a section gets a new hash and
+    # store_chunks inserts it as a new row. The old row (old text, old hash) is still there,
+    # so search would return both. Delete every row of this document whose hash is not
+    # in the current chunk list. Inserting first, deleting second = no moment with missing sections.
+    current = {hashlib.sha256(c["text"].encode()).hexdigest() for c in chunks}
+    rows = supabase.table("chunks").select("chunk_hash").eq("source_name", source_name).limit(5000).execute().data
+    stale = sorted({r["chunk_hash"] for r in rows} - current)
+    print(f"{len(stale)} stale rows to delete")
+    for i in range(0, len(stale), batch_size):
+        supabase.table("chunks").delete().eq("source_name", source_name).in_("chunk_hash", stale[i:i + batch_size]).execute()
