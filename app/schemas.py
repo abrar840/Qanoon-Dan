@@ -37,3 +37,23 @@ class RetrievedChunk(BaseModel):
     source_name: str
     content: str
     distance: float      # cosine distance from the SQL function, smaller = closer
+
+
+class AskRequest(BaseModel):
+    question: str = Field(..., min_length=3, max_length=500)
+    k: int = Field(default=5, ge=1, le=10)
+
+
+class Source(BaseModel):
+    section: str
+    law: str
+    distance: float
+    snippet: str
+
+
+class AskResponse(BaseModel):
+    answer: str
+    sources: list[Source]
+    refused: bool = False
+    crisis: bool = False
+    disclaimer: str = "Legal information, not legal advice. Consult a licensed lawyer."
