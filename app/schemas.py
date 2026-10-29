@@ -52,7 +52,7 @@ class Source(BaseModel):
 
 
 class AskResponse(BaseModel):
-    answer: str
+    answere: str
     sources: list[Source]
     refused: bool = False
     crisis: bool = False
