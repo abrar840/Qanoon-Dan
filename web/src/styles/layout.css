@@ -1,0 +1,295 @@
+/*
+  App shell: top bar + sidebar + main area.
+
+  Mobile (default): sidebar is an off-screen drawer, opened by the menu button.
+  Desktop (>= 900px): sidebar is a fixed column on the left.
+*/
+
+.shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  height: var(--topbar-height);
+  padding: 0 var(--s-3);
+  padding-top: env(safe-area-inset-top);
+  background: var(--c-bg);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-weight: 700;
+  color: var(--c-text);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.brand-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.topbar-spacer {
+  flex: 1;
+}
+
+.user-menu {
+  position: relative;
+}
+
+/* ---------- Sidebar / drawer ---------- */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(var(--sidebar-width), 85vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+  transform: translateX(-100%);
+  /* visibility hides it from Tab and screen readers while closed */
+  visibility: hidden;
+  transition:
+    transform var(--transition),
+    visibility 0s linear var(--transition);
+  z-index: 60;
+  padding-top: env(safe-area-inset-top);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 40%);
+  z-index: 55;
+}
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  height: var(--topbar-height);
+  padding: 0 var(--s-3);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--s-3);
+}
+
+.sidebar-foot {
+  padding: var(--s-3);
+  border-top: 1px solid var(--c-border);
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+}
+
+.sidebar-foot a {
+  display: block;
+  padding: var(--s-1) 0;
+}
+
+.new-chat {
+  margin-bottom: var(--s-4);
+}
+
+.conv-group-label {
+  margin: var(--s-3) 0 var(--s-1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-text-faint);
+}
+
+.conv-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  border-radius: var(--radius-sm);
+}
+
+.conv-item.active {
+  background: var(--c-primary-soft);
+}
+
+.conv-link {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  padding: var(--s-2) var(--s-3);
+  color: var(--c-text);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: var(--radius-sm);
+}
+
+.conv-item:hover {
+  background: var(--c-surface-2);
+}
+
+.conv-item.active:hover {
+  background: var(--c-primary-soft);
+}
+
+.conv-actions {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.conv-actions .icon-btn {
+  width: 32px;
+  height: 32px;
+}
+
+.conv-actions .icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.conv-rename {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 var(--s-2);
+  border: 1px solid var(--c-primary);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+}
+
+.sidebar-empty {
+  padding: var(--s-4) var(--s-2);
+  color: var(--c-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Main ---------- */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Centred column used by most pages. */
+.page {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--s-5) var(--s-4) var(--s-8);
+}
+
+.page-header {
+  margin-bottom: var(--s-5);
+}
+
+.page-header p {
+  color: var(--c-text-muted);
+  margin-top: var(--s-1);
+}
+
+/* ---------- Auth pages (no sidebar) ---------- */
+.auth-layout {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--s-6) var(--s-4);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  margin-top: var(--s-5);
+}
+
+.auth-card h1 {
+  margin-bottom: var(--s-1);
+}
+
+.auth-card .lead {
+  color: var(--c-text-muted);
+  margin-bottom: var(--s-5);
+}
+
+.auth-links {
+  margin-top: var(--s-4);
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+/* ---------- Footer lines (disclaimer + scope) ---------- */
+.legal-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--c-text-faint);
+  padding: var(--s-2) var(--s-4);
+  line-height: 1.4;
+}
+
+/* ---------- Not found ---------- */
+.notfound {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: var(--s-6);
+}
+
+.notfound .code {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--c-text-faint);
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 900px) {
+  .sidebar {
+    transform: none;
+    visibility: visible;
+    top: 0;
+  }
+
+  .sidebar-backdrop,
+  .sidebar-close,
+  .menu-btn {
+    display: none;
+  }
+
+  .shell.with-sidebar .topbar,
+  .shell.with-sidebar .main {
+    margin-left: var(--sidebar-width);
+  }
+}

@@ -1,0 +1,117 @@
+/*
+  Design tokens: every colour, radius and spacing value used by the app.
+  Change a value here and the whole UI follows.
+
+  Theme switching: <html data-theme="light"> or "dark". The attribute is set
+  by index.html (before paint) and by SettingsContext (on change).
+
+  Colour contrast: text on background is at least 7:1 in both themes, muted
+  text at least 4.5:1, so the UI stays readable in sunlight on a phone.
+*/
+:root {
+  /* type */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', Ubuntu, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --leading: 1.55;
+
+  /* spacing scale (rem) */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-8: 3rem;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-full: 999px;
+
+  --sidebar-width: 280px;
+  --topbar-height: 56px;
+  --content-max: 760px;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 6%), 0 4px 16px rgb(0 0 0 / 6%);
+  --focus-ring: 0 0 0 3px var(--c-focus);
+  --transition: 160ms ease;
+}
+
+/* ---------- LIGHT (default) ---------- */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --c-bg: #f6f5f1; /* warm paper */
+  --c-surface: #ffffff;
+  --c-surface-2: #eeede8;
+  --c-border: #d9d7cf;
+  --c-border-strong: #b9b6ab;
+
+  --c-text: #1d2129;
+  --c-text-muted: #5b6069;
+  --c-text-faint: #7d828b;
+
+  --c-primary: #1f4d6e; /* calm navy */
+  --c-primary-hover: #183e59;
+  --c-on-primary: #ffffff;
+  --c-primary-soft: #e3edf4;
+
+  --c-focus: #7fb0d8;
+
+  /* answer states */
+  --c-refused-bg: #fff7e6;
+  --c-refused-border: #e0b35a;
+  --c-refused-text: #6b4a00;
+
+  --c-crisis-bg: #fdecec;
+  --c-crisis-border: #d64545;
+  --c-crisis-text: #7a1f1f;
+  --c-crisis-strong: #b42318;
+
+  --c-success: #1d7a4f;
+  --c-error: #b42318;
+  --c-error-bg: #fdecec;
+  --c-info-bg: #e9f1f8;
+}
+
+/* ---------- DARK ---------- */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --c-bg: #14171b;
+  --c-surface: #1d2127;
+  --c-surface-2: #262b33;
+  --c-border: #333941;
+  --c-border-strong: #4a515b;
+
+  --c-text: #e8eaed;
+  --c-text-muted: #a8aeb7;
+  --c-text-faint: #868c95;
+
+  --c-primary: #8cbbe0;
+  --c-primary-hover: #a6cbe8;
+  --c-on-primary: #0f1d29;
+  --c-primary-soft: #203141;
+
+  --c-focus: #5f93bf;
+
+  --c-refused-bg: #2d2615;
+  --c-refused-border: #a98032;
+  --c-refused-text: #f0d59a;
+
+  --c-crisis-bg: #341b1b;
+  --c-crisis-border: #d05858;
+  --c-crisis-text: #f4c3c3;
+  --c-crisis-strong: #ff8a80;
+
+  --c-success: #5fcf95;
+  --c-error: #ff8a80;
+  --c-error-bg: #341b1b;
+  --c-info-bg: #1c2a38;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 4px 16px rgb(0 0 0 / 35%);
+}

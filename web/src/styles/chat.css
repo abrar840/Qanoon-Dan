@@ -1,0 +1,430 @@
+/* The chat screen: message list, question box, answer cards. */
+
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - var(--topbar-height));
+}
+
+.chat-scroll {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--s-4) var(--s-4) var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+
+/* ---------- Guest banner ---------- */
+.guest-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-info-bg);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Empty state ---------- */
+.empty {
+  margin: auto 0;
+  text-align: center;
+  padding: var(--s-6) 0;
+}
+
+.empty .empty-mark {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--s-4);
+  border-radius: 16px;
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+
+.empty h1 {
+  margin-bottom: var(--s-2);
+}
+
+.empty p {
+  color: var(--c-text-muted);
+  margin-bottom: var(--s-5);
+}
+
+.examples {
+  display: grid;
+  gap: var(--s-2);
+  text-align: left;
+}
+
+@media (min-width: 600px) {
+  .examples {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.example-btn {
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  color: var(--c-text);
+  text-align: left;
+  line-height: 1.4;
+}
+
+.example-btn:hover {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+
+/* ---------- One exchange: question + answer ---------- */
+.exchange {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.question {
+  align-self: flex-end;
+  max-width: 90%;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--radius) var(--radius) var(--radius-sm) var(--radius);
+  background: var(--c-primary-soft);
+  color: var(--c-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.answer {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: var(--s-4);
+}
+
+.answer-refused {
+  background: var(--c-refused-bg);
+  border-color: var(--c-refused-border);
+  color: var(--c-refused-text);
+}
+
+.answer-crisis {
+  background: var(--c-crisis-bg);
+  border-color: var(--c-crisis-border);
+  border-width: 2px;
+}
+
+.answer-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  margin-bottom: var(--s-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.answer-refused .answer-label {
+  color: var(--c-refused-text);
+}
+
+.answer-crisis .answer-label {
+  color: var(--c-crisis-strong);
+}
+
+.answer-text p {
+  margin-bottom: var(--s-3);
+  overflow-wrap: anywhere;
+}
+
+.answer-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* [Section 302] inside the answer text */
+.cite {
+  display: inline-block;
+  padding: 0 var(--s-1);
+  border-radius: 4px;
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  font-weight: 600;
+  font-size: 0.9em;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.cite:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Loading / error answer ---------- */
+.answer-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  color: var(--c-text-muted);
+}
+
+.answer-error {
+  border-color: var(--c-error);
+  background: var(--c-error-bg);
+  color: var(--c-error);
+}
+
+.answer-error .row {
+  margin-top: var(--s-3);
+}
+
+/* ---------- Crisis helplines ---------- */
+.helplines {
+  margin: var(--s-3) 0;
+  display: grid;
+  gap: var(--s-2);
+}
+
+.helpline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  border: 1px solid var(--c-crisis-border);
+}
+
+.helpline strong {
+  display: block;
+  color: var(--c-text);
+}
+
+.helpline .purpose {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+}
+
+.helpline .call {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--c-crisis-strong);
+  border-color: var(--c-crisis-border);
+}
+
+.verify-note {
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+/* ---------- Sources ---------- */
+.sources {
+  margin-top: var(--s-4);
+  border-top: 1px solid var(--c-border);
+  padding-top: var(--s-3);
+}
+
+.sources-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--c-text-muted);
+  margin-bottom: var(--s-2);
+}
+
+.source-list {
+  display: grid;
+  gap: var(--s-2);
+}
+
+.source {
+  padding: var(--s-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg);
+  scroll-margin-top: calc(var(--topbar-height) + var(--s-3));
+}
+
+.source:target,
+.source.highlight {
+  border-color: var(--c-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.source-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin-bottom: var(--s-1);
+}
+
+.source-section {
+  font-weight: 700;
+}
+
+.source-law {
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+}
+
+.source-snippet {
+  font-size: var(--text-sm);
+  color: var(--c-text);
+  line-height: 1.5;
+}
+
+.source-snippet.clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.source-more {
+  margin-top: var(--s-1);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-primary);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Answer footer: disclaimer + actions ---------- */
+.answer-foot {
+  margin-top: var(--s-4);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+
+.answer-disclaimer {
+  font-size: 0.8rem;
+  color: var(--c-text-faint);
+}
+
+.answer-actions {
+  display: flex;
+  gap: var(--s-1);
+  margin-left: auto;
+}
+
+.feedback-comment {
+  width: 100%;
+  margin-top: var(--s-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.feedback-comment textarea {
+  width: 100%;
+  min-height: 72px;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  resize: vertical;
+}
+
+/* ---------- Composer (question box) ---------- */
+.composer-wrap {
+  position: sticky;
+  bottom: 0;
+  background: var(--c-bg);
+  border-top: 1px solid var(--c-border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.composer {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--s-3) var(--s-4) var(--s-2);
+}
+
+.composer-box {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+  padding: var(--s-2);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+}
+
+.composer-box:focus-within {
+  border-color: var(--c-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.composer textarea {
+  flex: 1;
+  min-height: 44px;
+  max-height: 40vh;
+  padding: var(--s-2) var(--s-2);
+  border: 0;
+  background: transparent;
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+}
+
+.composer textarea:focus-visible {
+  box-shadow: none;
+}
+
+.send-btn {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+  display: grid;
+  place-items: center;
+}
+
+.send-btn:hover:not(:disabled) {
+  background: var(--c-primary-hover);
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+}
+
+.send-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.composer-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin-top: var(--s-1);
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+.composer-meta .over {
+  color: var(--c-error);
+  font-weight: 600;
+}
