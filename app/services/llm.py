@@ -10,13 +10,13 @@ def ask_groq(message:str,system_prompt:str|None=None,temperature:float=0.7)->str
     if system_prompt:
         messages.append({"role":"system","content":system_prompt})
     messages.append({"role":"user","content":message})
-    responses=client.responses.create(
-        model="llama-3.3-70b-versatile",
-        input=messages,
+    response=client.chat.completions.create(
+        model="openai/gpt-oss-120b",
+        messages=messages,
         temperature=temperature,
 
     )
     #return responses.output_text
-    return responses.choices[0].message.content
+    return response.choices[0].message.content
 
         

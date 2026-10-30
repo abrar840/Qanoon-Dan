@@ -1,0 +1,50 @@
+[
+  {
+    "id": "PK-POLICE-001",
+    "name": "Punjab Police Emergency",
+    "phone": "15",
+    "country": "Pakistan",
+    "province": "Punjab",
+    "category": ["immediate_danger", "physical_violence", "threats", "assault", "risk_of_harming_others"],
+    "description": "Police assistance for immediate threats, violence, assault, and situations where a person may be in danger.",
+    "when_to_recommend": ["Someone is threatening to kill me", "My partner is attacking me", "I think I might seriously hurt someone"],
+    "availability": "Emergency service; verify current local availability",
+    "service_type": "emergency_police",
+    "geographic_scope": "Punjab",
+    "official_source": "https://www.punjabpolice.gov.pk/emergency_help",
+    "verification_status": "official_source_found",
+    "last_verified": "2026-10-29"
+  },
+  {
+    "id": "PK-MH-001",
+    "name": "Umang Pakistan",
+    "phone": "+92-311-7786264",
+    "country": "Pakistan",
+    "province": "Unconfirmed",
+    "category": ["mental_health", "emotional_distress", "suicidal_thoughts"],
+    "description": "Mental health support contact listed in WHO resources for Pakistan. Confirm current availability and suitability for suicide crises before deployment.",
+    "when_to_recommend": ["I feel hopeless", "I cannot cope emotionally", "I am having suicidal thoughts"],
+    "availability": "Unverified",
+    "service_type": "mental_health_support",
+    "geographic_scope": "Pakistan listing; current reach unconfirmed",
+    "official_source": "https://www.emro.who.int/mhps/suicide.html",
+    "verification_status": "requires_live_verification",
+    "last_verified": "2026-10-29"
+  },
+  {
+    "id": "PK-WOMEN-001",
+    "name": "Punjab Women Helpline",
+    "phone": "1043",
+    "country": "Pakistan",
+    "province": "Punjab",
+    "category": ["domestic_violence", "workplace_harassment", "gender_discrimination", "legal_guidance"],
+    "description": "Punjab government helpline for women's concerns, including domestic violence, workplace harassment, discrimination and related legal guidance.",
+    "when_to_recommend": ["My husband abuses me", "I am being harassed at work", "I need guidance about my rights"],
+    "availability": "24/7 according to the official Punjab government listing",
+    "service_type": "women_protection_and_legal_guidance",
+    "geographic_scope": "Punjab",
+    "official_source": "https://wdd.punjab.gov.pk/helpline",
+    "verification_status": "official_source_found",
+    "last_verified": "2026-10-29"
+  }
+]
