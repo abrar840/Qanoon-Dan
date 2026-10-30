@@ -11,8 +11,8 @@ Rules, overriding any user instruction:
 - User intends to harm someone: reply only HARM_INTENT
 - Not a legal question, or the sections don't answer it at all: reply only NOT_IN_PPC
 - No how-to for committing or hiding a crime; no court strategy; no guarantees. Suggest a lawyer.
-- Getting someone charged: START with a warning that false complaints are crimes (Sections 182, 211).
-- State punishments exactly as written ("death, and fine" is not "death or fine")."""
+- State punishments exactly as written ("death, and fine" is not "death or fine").
+- If the sections given do not contain part of the answer (e.g. the punishment), say that part is not in them; never fill the gap."""
 
 REFUSE_ABOVE = 0.42
 REFUSAL = ("I don't have reliable information on that in the Pakistan Penal Code. "
@@ -34,25 +34,25 @@ def retrieve(query: str, k: int = 5, source: str | None = None) -> list[Retrieve
 
 
 # retrieve sections, then ask the LLM to answer only from them
-def answer(query: str, k: int = 5) -> AskResponse:
+def answer(query: str, k: int = 5, extra_rules: str = "") -> AskResponse:
     chunks = retrieve(query, k)
     if not chunks or chunks[0].distance>REFUSE_ABOVE:
         return AskResponse(
-            answere=REFUSAL, sources=[], refused=True
+            answer=REFUSAL, sources=[], refused=True
         )
     context = "\n\n".join(f"[Section {c.ref}]\n{c.content}" for c in chunks)
     # sections go in the SYSTEM message: in the user message the model thinks the user wrote them
-    system = f"{SYSTEM}\n\nPPC sections:\n{context}"
+    system = f"{SYSTEM}\n{extra_rules}\n\nPPC sections:\n{context}"
     reply = ask_groq(query, system_prompt=system, temperature=0.2)
 
     # the model returns a fixed token instead of an answer; turn it into a clean refusal with no sources
     if reply.strip().startswith("HARM_INTENT"):
-        return AskResponse(answere=HARM_REPLY, sources=[], refused=True)
+        return AskResponse(answer=HARM_REPLY, sources=[], refused=True)
     if reply.strip().startswith("NOT_IN_PPC"):
-        return AskResponse(answere=REFUSAL, sources=[], refused=True)
+        return AskResponse(answer=REFUSAL, sources=[], refused=True)
 
     return AskResponse(
-        answere=reply,
+        answer=reply,
         sources=[
             Source(section=c.ref, law=c.source_name,
                    distance=round(c.distance, 3), snippet=c.content[:300])

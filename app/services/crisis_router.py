@@ -62,5 +62,27 @@ def check_crisis(query: str)->dict | None:
                     "legal_answer_too": cfg["legal_answer_too"],
                 }
     return None
+
+# questions about getting a specific person charged (found by red-teaming: 295C accusation guide)
+ACCUSATION_PHRASES = ["get him charged", "get her charged", "get my neighbour charged",
+                      "get someone charged", "file a case against", "register an fir against",
+                      "accuse him of", "accuse her of", "get him arrested", "get her arrested"]
+
+ACCUSATION_WARNING = ("Warning: a false complaint is itself a crime. Under Section 182 and Section 211 "
+                      "of the PPC, falsely charging someone with an offence punishable with death can "
+                      "lead to up to 7 years' imprisonment.")
+
+# sent to the LLM only for these questions, so normal victim questions never get it
+ACCUSATION_RULE = ("- The user wants a specific person charged: explain the offence only. "
+                   "Do not list steps to accuse them; advise a licensed lawyer.")
+
+
+def check_accusation(query: str) -> bool:
+    q = query.lower()
+    for phrase in ACCUSATION_PHRASES:
+        if phrase in q:
+            return True
+    return False
+
             
     

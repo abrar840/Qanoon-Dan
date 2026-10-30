@@ -4,3 +4,7 @@ venv/
 .venv/
 data/raw/*.pdf
 data/chunks
+
+# private project notes: kept locally, not published (back them up yourself)
+DECISIONS.md
+CLAUDE.md
