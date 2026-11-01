@@ -11,7 +11,7 @@ import time
 
 from fastapi import HTTPException
 
-from app.routes.ask import ask
+from app.routes.ask import answer_question     # the /ask logic without the per-IP rate limit
 from app.schemas import AskRequest
 
 sys.stdout.reconfigure(encoding="utf-8")     # so Urdu and curly quotes print on Windows
@@ -43,8 +43,8 @@ for q in questions:
     for run in range(runs):
         start = time.perf_counter()
         try:
-            res = ask(AskRequest(question=q["question"]))
-        except HTTPException as e:                         # ask() turns any failure (e.g. Groq rate limit) into this
+            res = answer_question(AskRequest(question=q["question"]))
+        except HTTPException as e:                         # answer_question() turns any failure (e.g. Groq rate limit) into this
             print(f"#{q['id']} ERROR: {e}")
             report.append(f"### #{q['id']} {q['question']}\nERROR: {e}\n")
             continue

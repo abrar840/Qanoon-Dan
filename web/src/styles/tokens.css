@@ -1,0 +1,121 @@
+/*
+  Design tokens: every colour, radius and spacing value used by the app.
+  Change a value here and the whole UI follows.
+
+  Theme switching: <html data-theme="light"> or "dark". The attribute is set
+  by index.html (before paint) and by SettingsContext (on change).
+
+  Colour contrast: text on background is at least 7:1 in both themes, muted
+  text at least 4.5:1, so the UI stays readable in sunlight on a phone.
+*/
+:root {
+  /* type */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', Ubuntu, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --leading: 1.55;
+
+  /* spacing scale (rem) */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-8: 3rem;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-full: 999px;
+
+  --sidebar-width: 260px;
+  --topbar-height: 56px;
+  --content-max: 768px;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 4px 16px rgb(0 0 0 / 5%);
+  --focus-ring: 0 0 0 3px var(--c-focus);
+  --transition: 160ms ease;
+}
+
+/* ---------- LIGHT (default) ---------- */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --c-bg: #ffffff;
+  --c-surface: #ffffff;
+  --c-surface-2: #f4f4f4; /* question bubble, source rows */
+  --c-sidebar: #f9f9f9;
+  --c-hover: #ececec; /* hovered rows in the sidebar and lists */
+  --c-border: #e5e5e5;
+  --c-border-strong: #cfcfcf;
+
+  --c-text: #0d0d0d;
+  --c-text-muted: #5d5d5d;
+  --c-text-faint: #767676;
+
+  --c-primary: #0b6e4f; /* deep green, used for citations and links */
+  --c-primary-hover: #095a41;
+  --c-on-primary: #ffffff;
+  --c-primary-soft: #e6f2ed;
+
+  --c-focus: #8cc9b2;
+
+  /* answer states */
+  --c-refused-bg: #fff7e6;
+  --c-refused-border: #e0b35a;
+  --c-refused-text: #6b4a00;
+
+  --c-crisis-bg: #fdecec;
+  --c-crisis-border: #d64545;
+  --c-crisis-text: #7a1f1f;
+  --c-crisis-strong: #b42318;
+
+  --c-success: #1d7a4f;
+  --c-error: #b42318;
+  --c-error-bg: #fdecec;
+  --c-info-bg: #eef5f2;
+}
+
+/* ---------- DARK ---------- */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --c-bg: #212121;
+  --c-surface: #2a2a2a;
+  --c-surface-2: #323232;
+  --c-sidebar: #181818;
+  --c-hover: #2c2c2c;
+  --c-border: #3a3a3a;
+  --c-border-strong: #4d4d4d;
+
+  --c-text: #ececec;
+  --c-text-muted: #b4b4b4;
+  --c-text-faint: #8f8f8f;
+
+  --c-primary: #5fc79f;
+  --c-primary-hover: #7dd4b2;
+  --c-on-primary: #08241a;
+  --c-primary-soft: #1b3329;
+
+  --c-focus: #3e8f70;
+
+  --c-refused-bg: #2d2615;
+  --c-refused-border: #a98032;
+  --c-refused-text: #f0d59a;
+
+  --c-crisis-bg: #341b1b;
+  --c-crisis-border: #d05858;
+  --c-crisis-text: #f4c3c3;
+  --c-crisis-strong: #ff8a80;
+
+  --c-success: #5fcf95;
+  --c-error: #ff8a80;
+  --c-error-bg: #341b1b;
+  --c-info-bg: #1f2a26;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 4px 16px rgb(0 0 0 / 35%);
+}

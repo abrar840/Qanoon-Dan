@@ -11,4 +11,5 @@ pypdf
 supabase
 numpy
 rank_bm25
+slowapi==0.1.10
 

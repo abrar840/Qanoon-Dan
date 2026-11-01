@@ -1,0 +1,639 @@
+/* The chat screen: message list, question box, answer cards. */
+
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - var(--topbar-height));
+}
+
+.chat-scroll {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--s-4) var(--s-4) var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+}
+
+/* A new chat: the intro and the question box sit together in the middle of
+   the screen. Once the first question is sent, the box drops to the bottom. */
+.chat:has(.empty) {
+  justify-content: center;
+}
+
+.chat:has(.empty) .chat-scroll {
+  flex: 0 0 auto;
+}
+
+.chat:has(.empty) .composer-wrap {
+  position: static;
+  background: none;
+}
+
+/* ---------- Guest banner ---------- */
+.guest-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-info-bg);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Empty state ---------- */
+.empty {
+  text-align: center;
+  padding: var(--s-6) 0 0;
+  animation: rise 400ms ease both;
+}
+
+.empty .empty-mark {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--s-4);
+  border-radius: 14px;
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+
+.empty h1 {
+  margin-bottom: var(--s-2);
+  font-size: clamp(1.5rem, 1.1rem + 1.5vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.empty p {
+  max-width: 34rem;
+  margin: 0 auto var(--s-5);
+  color: var(--c-text-muted);
+}
+
+.examples-label {
+  margin-bottom: var(--s-3);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-text-faint);
+}
+
+.examples {
+  display: grid;
+  gap: var(--s-2);
+  text-align: left;
+}
+
+@media (min-width: 600px) {
+  .examples {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.example-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--c-border);
+  border-radius: 14px;
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-size: 0.95rem;
+  text-align: left;
+  line-height: 1.4;
+  transition:
+    border-color var(--transition),
+    background var(--transition);
+}
+
+.example-btn:hover {
+  border-color: var(--c-border-strong);
+  background: var(--c-hover);
+}
+
+.example-arrow {
+  flex-shrink: 0;
+  color: var(--c-text-faint);
+  transition:
+    color var(--transition),
+    transform var(--transition);
+}
+
+.example-btn:hover .example-arrow {
+  color: var(--c-text);
+  transform: translateX(2px);
+}
+
+/* New content slides up gently instead of popping in. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- One exchange: question + answer ---------- */
+.exchange {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  animation: rise 300ms ease both;
+  /* when scrolled to the top, stop below the top bar instead of under it */
+  scroll-margin-top: calc(var(--topbar-height) + var(--s-3));
+}
+
+.question {
+  align-self: flex-end;
+  max-width: 80%;
+  padding: 10px var(--s-4);
+  border-radius: 20px;
+  background: var(--c-surface-2);
+  color: var(--c-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* A normal answer has no box: the text sits on the page, like a document. */
+.answer {
+  line-height: 1.7;
+}
+
+/* Refused, crisis and error answers keep a coloured box so they stand out. */
+.answer-refused,
+.answer-crisis,
+.answer-error {
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid;
+  border-radius: 16px;
+}
+
+.answer-refused {
+  background: var(--c-refused-bg);
+  border-color: var(--c-refused-border);
+  color: var(--c-refused-text);
+}
+
+/* thick left edge: the crisis card must be impossible to miss */
+.answer-crisis {
+  background: var(--c-crisis-bg);
+  border-color: var(--c-crisis-border);
+  border-left-width: 5px;
+}
+
+.answer-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  margin-bottom: var(--s-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.answer-refused .answer-label {
+  color: var(--c-refused-text);
+}
+
+.answer-crisis .answer-label {
+  color: var(--c-crisis-strong);
+}
+
+.answer-text p {
+  margin-bottom: var(--s-3);
+  overflow-wrap: anywhere;
+  /* keep single line breaks: the backend sends helplines as "\n- Name: number" lines */
+  white-space: pre-line;
+}
+
+.answer-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Markdown from the backend: bold, lists, headings, tables */
+.answer-text strong {
+  font-weight: 650;
+}
+
+.answer-text ul,
+.answer-text ol {
+  margin: 0 0 var(--s-3);
+  padding-left: var(--s-5);
+}
+
+.answer-text li {
+  margin-bottom: var(--s-1);
+  overflow-wrap: anywhere;
+}
+
+.answer-text h1,
+.answer-text h2,
+.answer-text h3,
+.answer-text h4 {
+  font-size: var(--text-base);
+  font-weight: 650;
+  margin: var(--s-4) 0 var(--s-2);
+}
+
+.answer-text hr {
+  border: 0;
+  border-top: 1px solid var(--c-border);
+  margin: var(--s-4) 0;
+}
+
+.answer-table {
+  overflow-x: auto;
+  margin-bottom: var(--s-3);
+}
+
+.answer-table table {
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  min-width: 100%;
+}
+
+.answer-table th,
+.answer-table td {
+  border: 1px solid var(--c-border);
+  padding: var(--s-2);
+  text-align: left;
+  vertical-align: top;
+}
+
+.answer-table th {
+  background: var(--c-surface-2);
+  font-weight: 650;
+}
+
+/* [Section 302] inside the answer text */
+.cite {
+  display: inline-block;
+  padding: 0 var(--s-2);
+  border-radius: var(--radius-full);
+  line-height: 1.6;
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  font-weight: 600;
+  font-size: 0.9em;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.cite:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Loading / error answer ---------- */
+.answer-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  color: var(--c-text-muted);
+}
+
+/* a pulsing dot instead of the spinner while the answer is being written */
+.answer-loading .spinner {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  background: var(--c-text);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.answer-error {
+  border-color: var(--c-error);
+  background: var(--c-error-bg);
+  color: var(--c-error);
+}
+
+.answer-error .row {
+  margin-top: var(--s-3);
+}
+
+/* ---------- Crisis helplines ---------- */
+.helplines {
+  margin: var(--s-3) 0;
+  display: grid;
+  gap: var(--s-2);
+}
+
+.helpline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  border: 1px solid var(--c-crisis-border);
+}
+
+.helpline strong {
+  display: block;
+  color: var(--c-text);
+}
+
+.helpline .purpose {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+}
+
+.helpline .call {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--c-crisis-strong);
+  border-color: var(--c-crisis-border);
+}
+
+.verify-note {
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+/* ---------- Sources ---------- */
+.sources {
+  margin-top: var(--s-4);
+  line-height: var(--leading);
+}
+
+.sources-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-text-faint);
+  margin-bottom: var(--s-2);
+}
+
+.source-list {
+  display: grid;
+  gap: var(--s-1);
+}
+
+/* one collapsible row per section: "▸ Section 302 · Punishment of qatl-i-amd" */
+.source {
+  /* transparent border, so the highlight below can colour it without the row jumping */
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--c-surface-2);
+  scroll-margin-top: calc(var(--topbar-height) + var(--s-3));
+}
+
+.source:target,
+.source.highlight {
+  border-color: var(--c-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.source-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  cursor: pointer;
+  list-style: none; /* hide the browser's default marker; we draw our own arrow */
+}
+
+.source-head::-webkit-details-marker {
+  display: none;
+}
+
+.source-head::before {
+  content: '▸';
+  color: var(--c-text-faint);
+  transition: transform var(--transition);
+}
+
+.source details[open] > .source-head::before {
+  transform: rotate(90deg);
+}
+
+.source-section {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.source-title {
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.source-snippet {
+  padding: 0 var(--s-3) var(--s-1);
+  font-size: var(--text-sm);
+  color: var(--c-text);
+  line-height: 1.5;
+}
+
+.source-law {
+  display: block;
+  padding: 0 var(--s-3) var(--s-2);
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+/* "Also searched (4): 53, 396, 308, 316", collapsed by default */
+.sources-more {
+  margin-top: var(--s-2);
+}
+
+.sources-more > summary {
+  cursor: pointer;
+  font-size: var(--text-sm);
+  color: var(--c-text-muted);
+  padding: var(--s-1) 0;
+}
+
+.sources-more[open] > summary {
+  margin-bottom: var(--s-2);
+}
+
+/* ---------- Answer footer: disclaimer + actions ---------- */
+.answer-foot {
+  margin-top: var(--s-3);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  line-height: 1.4;
+}
+
+.answer-disclaimer {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+/* Copy / Share sit first, under the answer text (order: -1 moves them before
+   the disclaimer without changing the JSX). The negative margin lines the
+   icons up with the text instead of the button's padding. */
+.answer-actions {
+  order: -1;
+  display: flex;
+  gap: 2px;
+  margin-left: calc(-1 * var(--s-2));
+}
+
+.answer-actions .icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+}
+
+.answer-actions .icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.feedback-comment {
+  width: 100%;
+  margin-top: var(--s-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.feedback-comment textarea {
+  width: 100%;
+  min-height: 72px;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  resize: vertical;
+}
+
+/* ---------- Composer (question box) ---------- */
+.composer-wrap {
+  position: sticky;
+  bottom: 0;
+  /* fades out at the top so answers scroll under it without a hard line */
+  background: linear-gradient(to bottom, transparent, var(--c-bg) var(--s-5));
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.composer {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--s-4) var(--s-4) var(--s-1);
+}
+
+/* the pill-shaped box: text on the left, round send button on the right */
+.composer-box {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-2) var(--s-2) var(--s-4);
+  border: 1px solid var(--c-border);
+  border-radius: 28px;
+  background: var(--c-surface);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 6%);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+/* a darker edge (not a coloured ring) shows the box is active; the caret shows where you type */
+.composer-box:focus-within {
+  border-color: var(--c-border-strong);
+  box-shadow: 0 2px 16px rgb(0 0 0 / 10%);
+}
+
+.composer textarea {
+  flex: 1;
+  min-height: 40px;
+  max-height: 40vh;
+  padding: var(--s-2) 0;
+  border: 0;
+  background: transparent;
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+}
+
+.composer textarea:focus-visible {
+  box-shadow: none;
+}
+
+/* round send button: black in light mode, white in dark mode (text colour on page colour) */
+.send-btn {
+  width: 36px;
+  height: 36px;
+  margin: 2px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--c-text);
+  color: var(--c-bg);
+  display: grid;
+  place-items: center;
+  transition:
+    background var(--transition),
+    opacity var(--transition);
+}
+
+.send-btn:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.send-btn:disabled {
+  background: var(--c-border-strong);
+  color: var(--c-surface);
+}
+
+.send-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.composer-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin-top: var(--s-1);
+  padding: 0 var(--s-4);
+  font-size: 0.75rem;
+  color: var(--c-text-faint);
+}
+
+.composer-meta .over {
+  color: var(--c-error);
+  font-weight: 600;
+}

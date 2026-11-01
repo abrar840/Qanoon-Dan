@@ -80,7 +80,7 @@ app/
   schemas.py              # Pydantic request/response models (the contract with web/)
   routes/
     ask.py                # POST /ask: crisis router, accusation check, RAG answer
-    chat.py               # POST /chat: plain LLM call, no retrieval
+    chat.py               # POST /chat: plain LLM call, no retrieval (development only)
   services/
     ingestion.py          # PDF -> clean text -> one chunk per PPC section
     embeddings.py         # Gemini embeddings, store chunks (hash dedup), delete stale rows
@@ -143,6 +143,8 @@ GROQ_API_KEY=your_groq_key_here
 GEMINI_API_KEY=your_gemini_key_here
 SUPABASE_URL=your_supabase_project_url
 SUPABASE_SECRET_KEY=your_supabase_secret_key
+# optional: set to "production" on the server to hide /docs, /redoc and /openapi.json
+ENVIRONMENT=development
 ```
 
 ### 6. Create the search function
