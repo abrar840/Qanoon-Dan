@@ -1,25 +1,20 @@
 /**
- * User settings: theme, answer length, show/hide sources.
+ * User settings: theme and show/hide sources.
  *
- * Storage rules:
- *  - ALWAYS saved in localStorage ("qd.settings") so guests keep their theme
- *    and the page can apply the theme before React loads (see index.html).
- *  - When a user is logged in we ALSO load from and save to the API, so the
- *    settings follow them to another device.
+ * Saved in localStorage ("qd.settings") so they survive a reload, and so the
+ * page can apply the theme before React loads (see index.html).
  *
  * The theme is applied by setting <html data-theme="light|dark">; the CSS in
  * styles/tokens.css reads that attribute.
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { api, DEFAULT_SETTINGS, type Settings } from '../api';
-import { useAuth } from './AuthContext';
+import { DEFAULT_SETTINGS, type Settings } from '../api';
 
 const STORAGE_KEY = 'qd.settings';
 
 interface SettingsContextValue {
   settings: Settings;
-  /** Saves locally right away, then to the API if logged in. */
-  update(patch: Partial<Settings>): Promise<void>;
+  update(patch: Partial<Settings>): void;
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
@@ -49,7 +44,6 @@ function applyTheme(theme: Settings['theme']): void {
 }
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
   const [settings, setSettings] = useState<Settings>(loadLocal);
 
   // Apply the theme whenever it changes, and follow the OS when on 'system'.
@@ -62,45 +56,13 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener('change', onChange);
   }, [settings.theme]);
 
-  // When someone logs in, pull their saved settings from the server.
-  useEffect(() => {
-    if (!user) return;
-    let cancelled = false;
-    api
-      .getSettings()
-      .then((remote) => {
-        if (cancelled) return;
-        setSettings(remote);
-        saveLocal(remote);
-      })
-      .catch(() => {
-        /* keep local settings if the server call fails */
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const update = useCallback(
-    async (patch: Partial<Settings>) => {
-      // Optimistic: apply immediately so the UI feels instant.
-      setSettings((prev) => {
-        const next = { ...prev, ...patch };
-        saveLocal(next);
-        return next;
-      });
-      if (user) {
-        try {
-          const saved = await api.updateSettings(patch);
-          setSettings(saved);
-          saveLocal(saved);
-        } catch {
-          /* local copy already applied; the server copy will sync next login */
-        }
-      }
-    },
-    [user],
-  );
+  const update = useCallback((patch: Partial<Settings>) => {
+    setSettings((prev) => {
+      const next = { ...prev, ...patch };
+      saveLocal(next);
+      return next;
+    });
+  }, []);
 
   const value = useMemo(() => ({ settings, update }), [settings, update]);
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;

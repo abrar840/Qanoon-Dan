@@ -10,6 +10,6 @@ Quick start:
 ```bash
 cd web
 npm install
-copy .env.example .env.local     # keep VITE_USE_MOCK=true until the backend exists
-npm run dev                      # http://localhost:5173
+copy .env.example .env.local     # VITE_API_URL points at the FastAPI backend
+npm run dev                      # http://localhost:5173 (start the backend first)
 ```

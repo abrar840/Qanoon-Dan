@@ -1,7 +1,5 @@
 /** Plain-language explanation of what QanoonDaan is and is not. */
-import { Link } from 'react-router-dom';
 import { COPY } from '../config/examples';
-import { HELPLINES } from '../config/helplines';
 
 export function AboutPage() {
   return (
@@ -33,29 +31,17 @@ export function AboutPage() {
       <section className="section">
         <h2>If you are in danger</h2>
         <p className="section-desc">
-          QanoonDaan is not an emergency service. If you or someone near you is at risk, please call:
+          QanoonDaan is not an emergency service. If you or someone near you is at risk, contact the police or
+          emergency services right away. When a question suggests someone is in danger, QanoonDaan shows verified
+          helpline numbers at the top of the answer.
         </p>
-        <ul className="helplines">
-          {HELPLINES.map((h) => (
-            <li key={h.name} className="helpline">
-              <div>
-                <strong>{h.name}</strong>
-                <span className="purpose">{h.purpose}</span>
-              </div>
-              <a className="btn btn-sm call" href={`tel:${h.tel}`}>
-                {h.number}
-              </a>
-            </li>
-          ))}
-        </ul>
       </section>
 
       <section className="section">
         <h2>Your privacy</h2>
         <p>
-          As a guest, your questions are processed to produce an answer and are not tied to you. With an account,
-          your conversations are saved so you can return to them. You can delete them, or your whole account, at
-          any time in <Link to="/settings">Settings</Link>.
+          Your questions are processed to produce an answer and are not tied to you. They are not saved in this
+          app and disappear when you reload the page.
         </p>
       </section>
     </div>

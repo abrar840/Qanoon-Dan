@@ -1,8 +1,7 @@
 # QanoonDaan Backend Contract
 
 This is what the frontend (`web/src/api/http.ts`) expects from the FastAPI
-backend. Build to this and the UI works with `VITE_USE_MOCK=false` and no
-frontend changes. The TypeScript types in `web/src/api/types.ts` are the
+backend. Build to this and the UI works with no frontend changes. The TypeScript types in `web/src/api/types.ts` are the
 source of truth for field names; this document explains them.
 
 Conventions used throughout:
@@ -607,4 +606,4 @@ Note on `PATCH /me` with `avatar_url: null`: Pydantic v2 cannot tell
 7. [ ] Extend `/ask` to save for logged-in users and return the ids.
 8. [ ] `POST /feedback`.
 9. [ ] `POST /me/avatar` (Storage), `DELETE /me` (Admin API).
-10. [ ] Set `VITE_USE_MOCK=false` in the web app and click through every screen.
+10. [ ] Click through every screen in the web app against the real backend.

@@ -22,8 +22,9 @@
   height: var(--topbar-height);
   padding: 0 var(--s-3);
   padding-top: env(safe-area-inset-top);
-  background: var(--c-bg);
-  border-bottom: 1px solid var(--c-border);
+  /* see-through so answers scrolling underneath stay faintly visible */
+  background: color-mix(in srgb, var(--c-bg) 85%, transparent);
+  backdrop-filter: blur(8px);
 }
 
 .brand {
@@ -63,7 +64,7 @@
   width: min(var(--sidebar-width), 85vw);
   display: flex;
   flex-direction: column;
-  background: var(--c-surface);
+  background: var(--c-sidebar);
   border-right: 1px solid var(--c-border);
   transform: translateX(-100%);
   /* visibility hides it from Tab and screen readers while closed */
@@ -94,30 +95,58 @@
   justify-content: space-between;
   gap: var(--s-2);
   height: var(--topbar-height);
-  padding: 0 var(--s-3);
-  border-bottom: 1px solid var(--c-border);
+  padding: 0 var(--s-2) 0 var(--s-4);
 }
 
 .sidebar-body {
   flex: 1;
   overflow-y: auto;
-  padding: var(--s-3);
+  padding: var(--s-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.sidebar-foot {
-  padding: var(--s-3);
-  border-top: 1px solid var(--c-border);
-  font-size: var(--text-sm);
+/* One row in the sidebar: icon + label (New chat, Settings, About). */
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 40px;
+  padding: 0 var(--s-3);
+  border-radius: 10px;
+  color: var(--c-text);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background var(--transition);
+}
+
+.side-link:hover,
+.side-link.active {
+  background: var(--c-hover);
+  color: var(--c-text);
+}
+
+.side-link.active {
+  font-weight: 600;
+}
+
+.side-link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
   color: var(--c-text-muted);
 }
 
-.sidebar-foot a {
-  display: block;
-  padding: var(--s-1) 0;
+.sidebar-foot {
+  padding: var(--s-4);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--c-text-faint);
 }
 
-.new-chat {
-  margin-bottom: var(--s-4);
+.sidebar-foot p + p {
+  margin-top: var(--s-2);
 }
 
 .conv-group-label {
@@ -193,11 +222,13 @@
 }
 
 /* ---------- Main ---------- */
+/* No width: 100% here. On desktop .main also has a left margin for the
+   sidebar, and 100% + margin pushed the content off the right edge. */
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  min-width: 0;
 }
 
 /* Centred column used by most pages. */
@@ -285,6 +316,11 @@
   .sidebar-backdrop,
   .sidebar-close,
   .menu-btn {
+    display: none;
+  }
+
+  /* the sidebar already shows the brand on desktop */
+  .topbar .brand {
     display: none;
   }
 

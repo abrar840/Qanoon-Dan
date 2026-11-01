@@ -2,8 +2,7 @@
  * The frame around every main screen: top bar, sidebar (drawer on mobile),
  * and the page content via <Outlet />.
  *
- * The sidebar is always rendered (desktop column / mobile drawer). For
- * guests it shows a "log in to save history" message instead of the list.
+ * The sidebar is always rendered (desktop column / mobile drawer).
  */
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -16,7 +15,7 @@ export function AppShell() {
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
   const location = useLocation();
 
-  // Close the drawer when the route changes (user tapped a conversation).
+  // Close the drawer when the route changes (user tapped a link in it).
   useEffect(() => {
     setDrawerOpen(false);
   }, [location.pathname]);
