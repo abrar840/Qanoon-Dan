@@ -150,16 +150,43 @@ ENVIRONMENT=development
 ### 6. Create the search function
 Run `supabase/match_chunks.sql` in the Supabase SQL editor.
 
+### 7. Install the web UI (React)
+Needs Node.js 20+.
+
+```bash
+cd web
+npm install
+```
+
+Copy `web/.env.example` to `web/.env.local`. It holds one public setting:
+
+```env
+VITE_API_URL=http://127.0.0.1:8000
+```
+
+`VITE_*` values are sent to the browser, so never put a secret key in this file.
+
 ---
 
 ## Running the app
 
+**Backend** (terminal 1, from the project root, with the venv active):
 ```bash
 uvicorn app.main:app --reload
 ```
 
 - Health check: <http://localhost:8000/health> → `{"status": "ok"}`
 - Interactive API docs: <http://localhost:8000/docs>
+
+**Web UI** (terminal 2):
+```bash
+cd web
+npm run dev
+```
+
+Open the address Vite prints (usually <http://localhost:5173>).
+
+Other web commands: `npm run typecheck`, `npm run build` (output in `web/dist/`), `npm run preview`.
 
 ## Ingesting the law (one time)
 
