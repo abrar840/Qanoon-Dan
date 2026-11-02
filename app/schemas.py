@@ -56,4 +56,7 @@ class AskResponse(BaseModel):
     sources: list[Source]
     refused: bool = False
     crisis: bool = False
+    # which safety layer refused the answer, so the UI can show "Not allowed" instead of "No reliable
+    # information": "minor_rule", "religion_rule", "harm_rule" or "safety_check"; None otherwise
+    blocked_by: str | None = None
     disclaimer: str = "Legal information, not legal advice. Consult a licensed lawyer."

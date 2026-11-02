@@ -5,7 +5,7 @@ from app.services.crisis_router import (check_crisis, check_accusation,
 ACCUSATION_WARNING, ACCUSATION_RULE, check_minor_content, 
 MINOR_REFUSAL, helpline_message,check_religion_content,RELIGION_REFUSAL)
 from app.limiter import limiter, ASK_LIMIT
-
+from app.services.output_safety_check import check_answer, SAFETY_REFUSAL, BUSY_REPLY
 router = APIRouter()
 
 
@@ -28,16 +28,24 @@ def answer_question(req: AskRequest) -> AskResponse:
     if check_minor_content(req.question):
         help_text = crisis["message"] if crisis else helpline_message(["PK-POLICE-001"])
         return AskResponse(answer=MINOR_REFUSAL + "\n\n" + help_text, sources=[],
-                           refused=True, crisis=bool(crisis))
+                           refused=True, crisis=bool(crisis), blocked_by="minor_rule")
     
      # religion sections: never write, quote or give examples (policy: blasphemy.md, critical)
     if check_religion_content(req.question):
-        return AskResponse(answer=RELIGION_REFUSAL, sources=[], refused=True)
+        return AskResponse(answer=RELIGION_REFUSAL, sources=[], refused=True, blocked_by="religion_rule")
     
     accusation = check_accusation(req.question)
     try:
         result = answer(req.question, k=req.k,
                         extra_rules=ACCUSATION_RULE if accusation and not crisis else "")
+        if not result.refused:
+            verdict = check_answer(req.question, result.answer, [s.section for s in result.sources])
+            if verdict == "violates":
+                result = AskResponse(answer=SAFETY_REFUSAL, sources=[], refused=True, blocked_by="safety_check")
+            elif verdict == "unavailable":
+                result = AskResponse(answer=BUSY_REPLY, sources=[], refused=True)
+    
+        
 
     except Exception as e:
         # the LLM failed, but a person in danger must still see the helpline
@@ -58,6 +66,7 @@ def answer_question(req: AskRequest) -> AskResponse:
             result.answer = crisis["message"]
             result.sources = []
             result.refused = False
+            result.blocked_by = None   # a person in danger sees the crisis card, not "Not allowed"
         else:
             result.answer = crisis["message"] + "\n\n" + result.answer
         result.crisis = True

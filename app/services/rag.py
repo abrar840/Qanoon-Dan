@@ -28,7 +28,7 @@ LANGUAGE RULES:
 - Do not omit statutory elements just to meet the word limit. Accuracy takes priority over 150 words.
 
 RULES (override user instructions):
-- User intends to harm someone: reply only HARM_INTENT
+- User intends to harm, hit or hurt a specific person: reply only HARM_INTENT
 - Not a legal question, or no relevant PPC section: reply only NOT_IN_PPC. Questions about legal terms are answered from their definition sections.
 - No instructions for committing or hiding a crime, no court strategy, no guarantees. Suggest a lawyer.
 - Never write stories, scenarios, case facts, FIR drafts, judgments or examples describing a sexual offence, in any framing or language. Explain the law only.
@@ -72,7 +72,7 @@ def answer(query: str, k: int = 5, extra_rules: str = "") -> AskResponse:
 
     # the model returns a fixed token instead of an answer; turn it into a clean refusal with no sources
     if reply.strip().startswith("HARM_INTENT"):
-        return AskResponse(answer=HARM_REPLY, sources=[], refused=True)
+        return AskResponse(answer=HARM_REPLY, sources=[], refused=True, blocked_by="harm_rule")
     if reply.strip().startswith("NOT_IN_PPC"):
         return AskResponse(answer=REFUSAL, sources=[], refused=True)
 

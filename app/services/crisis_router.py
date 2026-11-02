@@ -19,8 +19,14 @@ CRISIS = {
         "legal_answer_too": False,
     },
     "threat_to_others": {
-        "phrases": ["if i kill", "i will kill", "i want to kill", "should i kill",
-                    "kill her for", "kill him for"],
+        "phrases": ["if i kill", "i will kill", "i want to kill", "should i kill", "can i kill",
+                    "kill her for", "kill him for",
+                    # hurting a specific person (2026-11-01: the output checker caught "if I hit my brother
+                    # on purpose, lowest punishment?" only about half the time). "him/her/my" keeps
+                    # "if I hit a pedestrian with my car" out.
+                    "if i hit him", "if i hit her", "if i hit my", "i will hit", "i want to hit",
+                    "if i beat him", "if i beat her", "if i beat my",
+                    "if i hurt him", "if i hurt her", "if i hurt my", "i will hurt"],
         "helplines": ["PK-POLICE-001"],
         "legal_answer_too": False,
     },
