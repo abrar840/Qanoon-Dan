@@ -1,8 +1,9 @@
 /**
- * The answer half of an exchange. Three looks:
+ * The answer half of an exchange. Four looks:
  *   normal  -> white card, answer text, sources (used in the answer, then "also searched"), actions
  *   refused -> amber card, "No reliable information" label, no sources
- *   crisis  -> red card; the backend's answer starts with the helplines
+ *   blocked -> red "Not allowed" card: a safety layer refused it (names the layer)
+ *   crisis  -> red card with a thick edge; the backend's answer starts with the helplines
  * Plus loading and error states while the request is in flight / failed.
  */
 import type { AskResponse } from '../../api';
@@ -27,6 +28,14 @@ interface Props {
   showSources: boolean;
   onRetry(item: ChatItem): void;
 }
+
+/** Plain names for the safety layers in `blocked_by`. */
+const BLOCKED_BY_LABEL: Record<string, string> = {
+  minor_rule: 'the child-safety rule',
+  religion_rule: 'the religion-sections rule',
+  harm_rule: 'the harm rule',
+  safety_check: 'the answer safety check',
+};
 
 export function AnswerCard({ item, showSources, onRetry }: Props) {
   const toast = useToast();
@@ -57,13 +66,22 @@ export function AnswerCard({ item, showSources, onRetry }: Props) {
   }
 
   const res = item.response;
-  const kind = res.crisis ? 'crisis' : res.refused ? 'refused' : 'normal';
+  const kind = res.crisis ? 'crisis' : res.blocked_by ? 'blocked' : res.refused ? 'refused' : 'normal';
 
   // sources come from the search; the answer text says which ones the model actually used
   const cited = citedSectionKeys(res.answer);
   const used = res.sources.filter((s) => cited.has(sectionKey(s.section)));
   const searched = res.sources.filter((s) => !cited.has(sectionKey(s.section)));
-  const className = kind === 'crisis' ? 'answer answer-crisis' : kind === 'refused' ? 'answer answer-refused' : 'answer';
+  const className =
+    kind === 'crisis' ? 'answer answer-crisis'
+    : kind === 'blocked' ? 'answer answer-blocked'
+    : kind === 'refused' ? 'answer answer-refused'
+    : 'answer';
+  const ariaLabel =
+    kind === 'crisis' ? 'Crisis answer'
+    : kind === 'blocked' ? 'Blocked answer'
+    : kind === 'refused' ? 'Refused answer'
+    : 'Answer';
 
   async function handleCopy() {
     const ok = await copyText(answerToText(item.question, res));
@@ -77,7 +95,7 @@ export function AnswerCard({ item, showSources, onRetry }: Props) {
   }
 
   return (
-    <article className={className} aria-label={kind === 'crisis' ? 'Crisis answer' : kind === 'refused' ? 'Refused answer' : 'Answer'}>
+    <article className={className} aria-label={ariaLabel}>
       {/* Helplines are NOT drawn here. The backend puts its verified numbers
           at the top of `answer`, and AnswerText shows them below. */}
       {kind === 'crisis' && (
@@ -92,7 +110,17 @@ export function AnswerCard({ item, showSources, onRetry }: Props) {
         </div>
       )}
 
+      {kind === 'blocked' && (
+        <div className="answer-label">
+          <AlertIcon width={14} height={14} /> Not allowed
+        </div>
+      )}
+
       <AnswerText text={res.answer} itemId={item.id} />
+
+      {kind === 'blocked' && res.blocked_by && (
+        <p className="blocked-note">Blocked by {BLOCKED_BY_LABEL[res.blocked_by] ?? 'a safety rule'}.</p>
+      )}
 
       {showSources && res.sources.length > 0 && (
         <section className="sources" aria-label="Sources">

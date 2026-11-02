@@ -39,6 +39,8 @@ export interface AskResponse {
   refused: boolean;
   /** true = a person may be in danger; the backend puts helplines at the top of `answer`. */
   crisis: boolean;
+  /** Which safety layer refused the answer; set only for safety refusals. The UI shows "Not allowed". */
+  blocked_by?: 'minor_rule' | 'religion_rule' | 'harm_rule' | 'safety_check' | null;
   disclaimer: string;
 }
 
