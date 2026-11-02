@@ -12,3 +12,6 @@ CLAUDE.md
 # web (React)
 node_modules/
 web/dist/
+
+# launch videos made by the brag skill (large mp4 files)
+brag-output*/
