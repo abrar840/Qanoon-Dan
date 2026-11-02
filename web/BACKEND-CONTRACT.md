@@ -165,6 +165,7 @@ Response `200`:
 | `answer`          | string         | Plain text. Blank lines separate paragraphs. Cite as `[Section 302]`; the UI turns these into chips.    |
 | `sources`         | list of Source | Empty when `refused` is true, or when a crisis has no legal answer. Avoid duplicate `section` values.   |
 | `refused`         | bool           | Day-15 refusal gate.                                                                                    |
+| `blocked_by`      | string or null | Set only when a safety layer refused: `minor_rule`, `religion_rule`, `harm_rule` or `safety_check`. The UI then shows a red "Not allowed" card naming the layer, instead of "No reliable information". |
 | `crisis`          | bool           | Day-15 crisis router. When true the UI shows helplines **above** `answer`, so `answer` may start with the helpline text and continue with the legal answer (or be helpline text only). |
 | `disclaimer`      | string         | Shown under every answer.                                                                               |
 | `conversation_id` | string or null (v2) | Set when the caller is logged in. New conversation created if the request had none. Null for guests. |

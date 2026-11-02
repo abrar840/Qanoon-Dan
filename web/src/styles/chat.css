@@ -177,6 +177,7 @@
 
 /* Refused, crisis and error answers keep a coloured box so they stand out. */
 .answer-refused,
+.answer-blocked,
 .answer-crisis,
 .answer-error {
   padding: var(--s-4) var(--s-5);
@@ -210,6 +211,24 @@
 
 .answer-refused .answer-label {
   color: var(--c-refused-text);
+}
+
+/* a safety layer refused the answer: red like the crisis card, but no thick edge (that means "get help") */
+.answer-blocked {
+  background: var(--c-blocked-bg);
+  border-color: var(--c-blocked-border);
+  border-width: 2px;
+  color: var(--c-blocked-strong);
+}
+
+.answer-blocked .answer-label {
+  color: var(--c-blocked-strong);
+}
+
+.blocked-note {
+  margin-top: var(--s-2);
+  font-size: 0.8rem;
+  opacity: 0.85;
 }
 
 .answer-crisis .answer-label {
